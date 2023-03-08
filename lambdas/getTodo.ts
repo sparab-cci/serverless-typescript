@@ -1,51 +1,54 @@
-import type { APIGatewayProxyHandler } from "aws-lambda";
-import { apiResponses } from "../apiResponses/apiResponses";
-import Todo from '../Services/dbService';
-// import { ITask } from "../models/task.model";
+import type {
+  APIGatewayProxyHandler,
+  APIGatewayProxyResult,
+  APIGatewayProxyEvent,
+} from "aws-lambda";
+// import { apiResponses } from "../apiResponses/apiResponses";
+// import Todo from "../Services/dbService";
+// import Task, { ITask } from "../models/task.model";
+import mongoose from "mongoose";
+// import { ITask } from "models/task.model";
 
-export const handler: APIGatewayProxyHandler = async (event, _context) => {
-try {
-  const data = event.queryStringParameters;
-  const todo = new Todo();
-  const bool = todo.connectDB(process.env.MONGO_URI);
-   if (bool) {
-  const response = todo.create(data.taskName, data.priority, data.status);
-  return apiResponses._200(response);
+export const handler:APIGatewayProxyHandler= async (_event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  let conn = null;
+  try {
+    conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log(`Database connected ::: ${conn.connection.host}`);
+    // return apiResponses._200(conn.connection.host);
+    return {
+      statusCode: 200,
+      body: conn.connection.host,
+    };
+  } catch (error) {
+    console.error(`Error::: ${error.message}`);
+    return {
+      statusCode: 400,
+      body: error,
+    };
   }
-   else {
-     return apiResponses._400('connection failed');
-  }
-  // const response = await todo.create(data.taskName, data.priority, data.status);
-  // return apiResponses._200(response);
-} catch (error) {
-  console.log(error);
-}
-
-  // const data = event.queryStringParameters;
-  // console.log("data ", data);
-  // const todo = new Todo();
-  // const bool = todo.connectDB(process.env.MONGO_URI);
-  // console.log("boolean val ", bool);
-  // const todo = new Todo(data.taskName, data.priority, data.status);
-  // if (todo.connectDB(process.env.MONGO_URI)) {
-  // const response = todo.create(data.taskName, data.priority, data.status);
-  // return apiResponses._200(response);
-  // }
-  // else {
-  //  return apiResponses._400({
-  //   message: "missing task or no data for the task",
-  // });
-  // }
-  // const task = event.pathParameters?.task;
-
-  // if (!task || !taskData[task]) {
-  //   return apiResponses._400({
-  //     message: "missing task or no data for the task",
-  //   });
-  // }
-
-  // return apiResponses._200(taskData[task]);
 };
+
+// export const handler: APIGatewayProxyHandler = async (event) => {
+//   let data = event.queryStringParameters;
+//   try {
+//     const todo = new Todo();
+//     const conn: Promise<boolean> = todo.connectDB(process.env.MONGO_URI);
+//     // console.log("boolean val ", bool);
+//     // const todo = new Todo(data.taskName, data.priority, data.status);
+//     if (conn) {
+//     const response: Promise<ITask> = todo.create(data.taskName, data.priority, data.status);
+//     return apiResponses._200(response);
+//     }
+//     else {
+//      return apiResponses._400({
+//       message: "------>> There was an error creating a task <<----------",
+//     });
+//     }
+//   } catch (error) {
+//     console.error(`Error::: ${error.message}`);
+//     throw error;
+//   }
+// };
 
 // interface TaskData {
 //   taskName: string;

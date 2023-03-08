@@ -15,7 +15,7 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
       MONGO_URI:
-        "mongodb+srv://sneha:su170277@cluster2.asmzl5e.mongodb.net/test",
+        "mongodb+srv://sneha:su170277@cluster2.asmzl5e.mongodb.net/?retryWrites=true&w=majority",
     },
   },
   // import the function via paths

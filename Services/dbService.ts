@@ -13,10 +13,10 @@ export default class Todo {
   }
 
   connectDB(URI: string) {
-    const conn = mongoose
+    let conn = mongoose
       .connect(URI)
       .then(() => {
-        console.log("DB connected");
+        console.log("db connected");
         return true;
       })
       .catch((error) => {
@@ -26,18 +26,16 @@ export default class Todo {
     return conn;
   }
 
-  create(taskName: string, priority: string, status: string) {
-    let data: ITask = new Task({
+  async create(taskName: string, priority: string, status: string) {
+    let data = new Task({
       taskName: taskName,
       priority: priority,
       status: status,
     });
     // return data;
-    let newTask = data.save();
-    // if (!newTask) throw new Error();
-    // else
-    console.log(newTask);
-      return newTask;
+    let newTask: ITask = await data.save();
+    if (!newTask) throw new Error();
+    else return newTask;
   }
 }
 

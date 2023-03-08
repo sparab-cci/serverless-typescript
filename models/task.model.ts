@@ -36,4 +36,4 @@ const taskSchema: Schema = new Schema(
 );
 
 //export task model
-export default model<ITask>("Task", taskSchema);
+export default model<ITask>("todoTask", taskSchema);
