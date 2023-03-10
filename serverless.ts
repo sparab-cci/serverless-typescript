@@ -56,6 +56,18 @@ const serverlessConfiguration: AWS = {
         },
       ],
     },
+    getTask: {
+      handler: "lambdas/getTask.handler",
+      events: [
+        {
+          http: {
+            path: "get-task",
+            method: "get",
+            cors: true,
+          },
+        },
+      ],
+    },
   },
   package: { individually: true },
   custom: {

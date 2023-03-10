@@ -34,6 +34,15 @@ export default class Todo {
 
   }
 
+  async getTask(taskId: string): Promise<ITask | Error> {
+
+    console.log("task id ", taskId);
+    let task: ITask = await Task.findOne({_id: taskId});
+    if (!task) throw new Error();
+    else return task;
+
+  }
+
 }
 
 
