@@ -44,6 +44,18 @@ const serverlessConfiguration: AWS = {
         },
       ],
     },
+    addTodo: {
+      handler: "lambdas/addTask.handler",
+      events: [
+        {
+          http: {
+            path: "add-task",
+            method: "post",
+            cors: true,
+          },
+        },
+      ],
+    },
   },
   package: { individually: true },
   custom: {

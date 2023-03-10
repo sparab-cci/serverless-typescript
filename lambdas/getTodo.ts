@@ -4,28 +4,50 @@ import type {
   APIGatewayProxyEvent,
 } from "aws-lambda";
 // import { apiResponses } from "../apiResponses/apiResponses";
-// import Todo from "../Services/dbService";
-// import Task, { ITask } from "../models/task.model";
+import Todo from "../Services/dbService";
+import { ITask } from "../models/task.model";
 import mongoose from "mongoose";
 // import { ITask } from "models/task.model";
 
-export const handler:APIGatewayProxyHandler= async (_event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  let conn = null;
-  try {
-    conn = await mongoose.connect(process.env.MONGO_URI);
-    console.log(`Database connected ::: ${conn.connection.host}`);
-    // return apiResponses._200(conn.connection.host);
-    return {
-      statusCode: 200,
-      body: conn.connection.host,
-    };
-  } catch (error) {
-    console.error(`Error::: ${error.message}`);
-    return {
-      statusCode: 400,
-      body: error,
-    };
-  }
+export const handler: APIGatewayProxyHandler = async (_event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  // let conn = null;
+  // let payload = {
+  //   taskName: 'abcdefg',
+  //   priority: 'HIGH',
+  //   status: 'DONE',
+  // }
+  let body = JSON.parse(_event.body);
+  let { taskName } = body;
+  // try {
+    
+  // } catch (error) {
+    
+  // }
+  return {
+        statusCode: 200,
+        body: JSON.stringify(taskName),
+      };
+ 
+  // try {
+  //   conn = await mongoose.connect(process.env.MONGO_URI);
+  //   console.log(`Database connected ::: ${conn.connection.host}`);
+  //   // return apiResponses._200(conn.connection.host);
+  //   if (conn) {
+  //     const todo = new Todo();
+  //     const response1 = todo.create(data.taskName, data.priority, data.status);
+  //     // const response = _event.queryStringParameters;
+  //     return {
+  //       statusCode: 200,
+  //       body: JSON.stringify(response1),
+  //     };
+  //   }    
+  // } catch (error) {
+  //   console.error(`Error::: ${error.message}`);
+  //   return {
+  //     statusCode: 400,
+  //     body: error,
+  //   };
+  // }
 };
 
 // export const handler: APIGatewayProxyHandler = async (event) => {
