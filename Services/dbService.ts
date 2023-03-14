@@ -12,55 +12,46 @@ export default class Todo {
     else return conn;
   }
 
-  async addTask(taskName: string, priority: string, status: string): Promise<ITask | Error> {
+  async addTask(...taskDetails: string[]): Promise<ITask | Error> {
 
     let data = new Task({
-      taskName: taskName,
-      priority: priority,
-      status: status,
+      taskName: taskDetails[0],
+      priority: taskDetails[1],
+      status: taskDetails[2],
     });
-    let newTask: ITask = await data.save();
-    if (!newTask) throw new Error();
+    let newTask: ITask | null = await data.save();
+    if (!newTask) throw new Error("Task could not be added");
     else return newTask;
 
   }
   async getTaskList(): Promise<ITask[] | Error> {
 
-    let tasks: ITask[] = await Task.find();
-    if (!tasks) throw new Error();
+    let tasks: ITask[] | null = await Task.find();
+    if (!tasks) throw new Error("Task list is empty");
     else return tasks;
 
   }
   async getTask(taskId: string): Promise<ITask | Error> {
 
-    let task: ITask = await Task.findOne({ _id: taskId });
-    if (!task) throw new Error();
+    let task: ITask | null = await Task.findOne({ _id: taskId });
+    if (!task) throw new Error("Task " + taskId + " not found");
     else return task;
 
   }
   async removeTask(taskId: string): Promise<ITask | Error> {
 
-    let task: ITask = await Task.findByIdAndDelete({ _id: taskId });
-    if (!task) throw new Error();
+    let task: ITask | null = await Task.findByIdAndDelete(taskId);
+    if (!task) throw new Error("Task " + taskId + " not found");
     else return task;
 
   }
   async updateTask(taskId: string, body: ITask): Promise<ITask | Error> {
 
-    let task: ITask = await Task.findByIdAndUpdate({ _id: taskId }, body);
-    if (!task) throw new Error();
+    let task: ITask | null = await Task.findByIdAndUpdate(taskId, body);
+    if (!task) throw new Error("Task " + taskId + " not found");
     else return task;
 
   }
 
 }
 
-
-
-
-
-
-
-
-
-// export default connectDB;

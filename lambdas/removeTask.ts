@@ -10,25 +10,23 @@ import mongoose from "mongoose";
 export const handler: APIGatewayProxyHandler = async (_event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
 
     let dbConnection = null;
-    let taskId: string = _event.queryStringParameters ? _event.queryStringParameters.id : '640b35911683d344322eacbd'; //specify the taskId when invoking locally
+    let taskId: string = _event.queryStringParameters ? _event.queryStringParameters.id : '6409a1bae3d07ddb1095592c'; //specify the taskId when invoking locally
     console.log("task id in handler ", taskId);
     try {
         dbConnection = await mongoose.connect(process.env.MONGO_URI);
         console.log(`Database connected ::: ${dbConnection.connection.host}`);
         if (dbConnection) {
             const todo = new Todo();
-            const response = await todo.removeTask(taskId);
-            if (response) {
+            await todo.removeTask(taskId);
                 return {
                     statusCode: 200,
                     body: "{ \"message\": \"task deleted!\" }"
                 };
-            }
         }
     } catch (error) {
         return {
             statusCode: 400,
-            body: JSON.stringify(error.message),
+            body: "{ \"message\": \""+ error.message +"\" }",
         };
     }
 

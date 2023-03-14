@@ -20,18 +20,16 @@ export const handler: APIGatewayProxyHandler = async (_event: APIGatewayProxyEve
         console.log(`Database connected ::: ${dbConnection.connection.host}`);
         if (dbConnection) {
             const todo = new Todo();
-            const response = await todo.updateTask(taskId, body);
-            if (response) {
+            await todo.updateTask(taskId, body);
                 return {
                     statusCode: 200,
                     body: "{ \"message\": \"task updated!\" }"
                 };
-            }
         }
     } catch (error) {
         return {
             statusCode: 400,
-            body: JSON.stringify(error.message),
+            body: "{ \"message\": \"" + error.message + "\" }",
         };
     }
 };

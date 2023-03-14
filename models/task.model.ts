@@ -11,7 +11,11 @@ const taskSchema: Schema = new Schema(
   {
     taskName: {
       type: String,
-      required: true
+      required: true,
+      index: {
+        unique: true,
+        dropDups: true,
+      },
     },
     priority: {
       type: String,

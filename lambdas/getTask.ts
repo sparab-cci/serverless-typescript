@@ -26,7 +26,7 @@ export const handler: APIGatewayProxyHandler = async (_event: APIGatewayProxyEve
         console.error(`Error::: ${error.message}`);
         return {
             statusCode: 400,
-            body: error.message,
+            body: "{ \"message\": \"" + error.message + "\" }",
         };
     }
 
