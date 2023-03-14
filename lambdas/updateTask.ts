@@ -21,19 +21,18 @@ export const handler: APIGatewayProxyHandler = async (_event: APIGatewayProxyEve
         if (dbConnection) {
             const todo = new Todo();
             const response = await todo.updateTask(taskId, body);
+            if (response) {
                 return {
                     statusCode: 200,
                     body: "{ \"message\": \"task updated!\" }"
                 };
-
+            }
         }
     } catch (error) {
-        console.error(`Error::: ${error.message}`);
         return {
             statusCode: 400,
-            body: error.message,
+            body: JSON.stringify(error.message),
         };
     }
-
 };
 

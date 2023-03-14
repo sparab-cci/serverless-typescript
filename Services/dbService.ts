@@ -26,34 +26,28 @@ export default class Todo {
   }
   async getTaskList(): Promise<ITask[] | Error> {
 
-    let tasks: ITask[] | null = await Task.find();
+    let tasks: ITask[] = await Task.find();
     if (!tasks) throw new Error();
     else return tasks;
 
   }
   async getTask(taskId: string): Promise<ITask | Error> {
 
-    console.log("task id ", taskId);
-    let task: ITask | null = await Task.findOne({ _id: taskId });
+    let task: ITask = await Task.findOne({ _id: taskId });
     if (!task) throw new Error();
     else return task;
 
   }
   async removeTask(taskId: string): Promise<ITask | Error> {
 
-    console.log("task id ", taskId);
-    let task: ITask | null = await Task.findByIdAndDelete({ _id: taskId });
-    console.log("deleted task ", task);
+    let task: ITask = await Task.findByIdAndDelete({ _id: taskId });
     if (!task) throw new Error();
     else return task;
 
   }
   async updateTask(taskId: string, body: ITask): Promise<ITask | Error> {
 
-    console.log("task id ", taskId);
-    console.log("body ", body);
-    let task: ITask | null = await Task.findByIdAndUpdate({ _id: taskId }, body);
-    console.log("task in updateTask ---->> ", task);
+    let task: ITask = await Task.findByIdAndUpdate({ _id: taskId }, body);
     if (!task) throw new Error();
     else return task;
 
