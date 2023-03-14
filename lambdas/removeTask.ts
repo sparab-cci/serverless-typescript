@@ -5,25 +5,22 @@ import type {
 } from "aws-lambda";
 import Todo from "../Services/dbService";
 import mongoose from "mongoose";
+// import { report } from "process";
 
 export const handler: APIGatewayProxyHandler = async (_event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    let payload = {
-        taskName: "task",
-        priority: "MED",
-        status: "DONE",
-    };
-    let body = _event.body ? JSON.parse(_event.body) : payload;
-    let { taskName, priority, status } = body;
+
     let dbConnection = null;
+    let taskId: string = _event.queryStringParameters ? _event.queryStringParameters.id : '640b35911683d344322eacbd'; //specify the taskId when invoking locally
+    console.log("task id in handler ", taskId);
     try {
         dbConnection = await mongoose.connect(process.env.MONGO_URI);
         console.log(`Database connected ::: ${dbConnection.connection.host}`);
         if (dbConnection) {
             const todo = new Todo();
-            const response = await todo.addTask(taskName, priority, status);
+            const response = await todo.removeTask(taskId);
             return {
                 statusCode: 200,
-                body: "{ \"message\": \"task added!\" }"
+                body: "{ \"message\": \"task deleted!\" }"
             };
         }
     } catch (error) {
@@ -33,4 +30,6 @@ export const handler: APIGatewayProxyHandler = async (_event: APIGatewayProxyEve
             body: error.message,
         };
     }
+
 };
+

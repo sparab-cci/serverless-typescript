@@ -20,31 +20,19 @@ const serverlessConfiguration: AWS = {
   },
   // import the function via paths
   functions: {
-    getCityInfo: {
-      handler: "lambdas/getCityInfo.handler",
+    getTaskList: {
+      handler: "lambdas/getTaskList.handler",
       events: [
         {
           http: {
-            path: "get-city/{city}",
+            path: "get-task-list",
             method: "get",
             cors: true,
           },
         },
       ],
     },
-    getTodo: {
-      handler: "lambdas/getTodo.handler",
-      events: [
-        {
-          http: {
-            path: "get-todo",
-            method: "get",
-            cors: true,
-          },
-        },
-      ],
-    },
-    addTodo: {
+    addTask: {
       handler: "lambdas/addTask.handler",
       events: [
         {
@@ -63,6 +51,30 @@ const serverlessConfiguration: AWS = {
           http: {
             path: "get-task",
             method: "get",
+            cors: true,
+          },
+        },
+      ],
+    },
+    removeTask: {
+      handler: "lambdas/removeTask.handler",
+      events: [
+        {
+          http: {
+            path: "remove-task",
+            method: "delete",
+            cors: true,
+          },
+        },
+      ],
+    },
+    updateTask: {
+      handler: "lambdas/updateTask.handler",
+      events: [
+        {
+          http: {
+            path: "update-task",
+            method: "patch",
             cors: true,
           },
         },

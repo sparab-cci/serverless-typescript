@@ -9,7 +9,7 @@ import mongoose from "mongoose";
 export const handler: APIGatewayProxyHandler = async (_event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
 
     let dbConnection = null;
-    let taskId: string = _event.queryStringParameters? _event.queryStringParameters.id : '640998a39dfacee6868ed488';
+    let taskId: string = _event.queryStringParameters ? _event.queryStringParameters.id : '640998a39dfacee6868ed488';//specify the taskId when invoking locally
     console.log("task id in handler ", taskId);
     try {
         dbConnection = await mongoose.connect(process.env.MONGO_URI);
@@ -26,7 +26,7 @@ export const handler: APIGatewayProxyHandler = async (_event: APIGatewayProxyEve
         console.error(`Error::: ${error.message}`);
         return {
             statusCode: 400,
-            body: error,
+            body: error.message,
         };
     }
 
