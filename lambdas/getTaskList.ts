@@ -4,24 +4,28 @@ import type {
   APIGatewayProxyEvent,
 } from "aws-lambda";
 import Todo from "../Services/dbService";
-import mongoose from "mongoose";
 
 export const handler: APIGatewayProxyHandler = async (_event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
 
   let dbConnection = null;
   try {
-    dbConnection = await mongoose.connect(process.env.MONGO_URI);
-    console.log(`Database connected ::: ${dbConnection.connection.host}`);
+    const todo = new Todo();
+    dbConnection = todo.connectDB(process.env.MONGO_URI);
     if (dbConnection) {
-      const todo = new Todo();
       const response = await todo.getTaskList();
-      return {
-        statusCode: 200,
-        body: JSON.stringify(response),
-      };
+      if (response.length != 0) {
+        return {
+          statusCode: 200,
+          body: JSON.stringify(response),
+        };
+      } else {
+        return {
+          statusCode: 404,
+          body: "{ \"message\": \" task list empty \" }",
+        };
+      }
     }
   } catch (error) {
-    console.error(`Error::: ${error.message}`);
     return {
       statusCode: 400,
       body: "{ \"message\": \"" + error.message + "\" }",

@@ -4,26 +4,30 @@ import type {
     APIGatewayProxyEvent,
 } from "aws-lambda";
 import Todo from "../Services/dbService";
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 
 export const handler: APIGatewayProxyHandler = async (_event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
 
     let dbConnection = null;
-    let taskId: string = _event.queryStringParameters ? _event.queryStringParameters.id : '640998a39dfacee6868ed488';//specify the taskId when invoking locally
-    console.log("task id in handler ", taskId);
+    let taskId: string = _event.queryStringParameters ? _event.queryStringParameters.id : '640e6df0f38ec7c6616588fe';//specify the taskId when invoking locally
     try {
-        dbConnection = await mongoose.connect(process.env.MONGO_URI);
-        console.log(`Database connected ::: ${dbConnection.connection.host}`);
+        const todo = new Todo();
+        dbConnection = todo.connectDB(process.env.MONGO_URI);
         if (dbConnection) {
-            const todo = new Todo();
             const response = await todo.getTask(taskId);
-            return {
-                statusCode: 200,
-                body: JSON.stringify(response),
-            };
+            if (response) {
+                return {
+                    statusCode: 200,
+                    body: JSON.stringify(response),
+                };
+            } else {
+                return {
+                    statusCode: 404,
+                    body: "{ \"message\": \" task " + taskId + " not found \" }",
+                };
+            }
         }
     } catch (error) {
-        console.error(`Error::: ${error.message}`);
         return {
             statusCode: 400,
             body: "{ \"message\": \"" + error.message + "\" }",
